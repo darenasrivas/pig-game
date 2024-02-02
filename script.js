@@ -19,12 +19,15 @@ const init = function () {
   currentScore = 0
   activePlayer = 0
   scores = [0, 0]
-  // diceEl.classList.add('hidden')
   diceEl.style.display = 'none'
   score0El.textContent = 0
   score1El.textContent = 0
   current0El.textContent = 0
   current1El.textContent = 0
+  player0El.classList.remove('player--winner')
+  player1El.classList.remove('player--winner')
+  player0El.classList.add('player--active')
+  player1El.classList.remove('player--active')
 }
 
 init()
@@ -51,15 +54,28 @@ btnRoll.addEventListener('click', () => {
   }
 })
 
-btnNew.addEventListener('click', () => {
-  console.log('New game')
-})
+// Asociamos la funcion INIT al botón nueva partida
+btnNew.addEventListener('click', init)
 
 btnHold.addEventListener('click', () => {
   scores[activePlayer] += currentScore
   document.querySelector(`#score--${activePlayer}`).textContent =
     scores[activePlayer]
-  switchtPlayer()
+  // Finaliza la partida?
+  if (scores[activePlayer] >= 10) {
+    // Acaba el juego y le añadimos al jugador activo la clase winner
+    document
+      .querySelector(`.player--${activePlayer}`)
+      .classList.add('player--winner')
+    document
+      .querySelector(`.player--${activePlayer}`)
+      .classList.remove('player--active')
+    // Esconde el dado
+    diceEl.style.display = 'none'
+  } else {
+    // Cambio de jugador
+    switchtPlayer()
+  }
 })
 
 function switchtPlayer() {
