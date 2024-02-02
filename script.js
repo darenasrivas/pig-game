@@ -1,60 +1,80 @@
-// Seleccionar elementos del DOM
+// seleccionar elementos del DOM
 
-// Botones
-const newGameButton = document.querySelector('.btn--new')
-const rollDiceButton = document.querySelector('.btn--roll')
-const holdButton = document.querySelector('.btn--hold')
-// Campos
-let p0ScoreField = document.getElementById('score--0')
-let p1ScoreField = document.getElementById('score--1')
-let p0CurrentScoreField = document.getElementById('current--0')
-let p1CurrentScoreField = document.getElementById('current--1')
-// Imagen Dado
-let dice = document.querySelector('.dice')
-let diceNumber = 0
+const btnNew = document.querySelector('.btn--new')
+const btnRoll = document.querySelector('.btn--roll')
+const btnHold = document.querySelector('.btn--hold')
+const diceEl = document.querySelector('.dice')
+const score0El = document.querySelector('#score--0')
+const score1El = document.querySelector('#score--1')
+const current0El = document.querySelector('#current--0')
+const current1El = document.querySelector('#current--1')
+const player0El = document.querySelector('.player--0')
+const player1El = document.querySelector('.player--1')
 
-// Iniciar marcadores
+// const btnHold = document.getElementsByClassName('btn--hold')[0]
 
-const p0InitScore = 0
-const p1InitScore = 0
+let currentScore, scores, activePlayer
 
-const p0InitCurrentScore = 0
-const p1InitCurrentScore = 0
+const init = function () {
+  currentScore = 0
+  activePlayer = 0
+  scores = [0, 0]
+  // diceEl.classList.add('hidden')
+  diceEl.style.display = 'none'
+  score0El.textContent = 0
+  score1El.textContent = 0
+  current0El.textContent = 0
+  current1El.textContent = 0
+}
 
-// Llamar a la funcion INIT que haga:
-// Dado invisible
-// Score1 y 2 a 0
-// Y current Scores a 0
+init()
 
-newGameButton.addEventListener('click', () => {
-  dice.style.opacity = 0
+console.log(btnNew, btnRoll, btnHold)
 
-  p0ScoreField.textContent = p0InitScore
-  p1ScoreField.textContent = p1InitScore
+btnRoll.addEventListener('click', () => {
+  // sacas un número del 1 al 6
+  const dice = Math.trunc(Math.random() * 6) + 1
 
-  p0CurrentScoreField.textContent = p0InitCurrentScore
-  p1CurrentScoreField.textContent = p1InitCurrentScore
-})
+  // mostrar el dado
+  diceEl.style.display = 'block'
+  diceEl.src = `dice-${dice}.png`
 
-// Boton Roll Dice
-
-// Función Roll Dice
-
-TODO: rollDiceButton.addEventListener('click', () => {
-  // Muestra dado
-  dice.style.opacity = 100
-
-  // Sacar numero
-  diceNumber = Math.trunc(Math.random() * 6) + 1
-
-  // Mostrar datos
-  dice.src = `dice-${diceNumber}.png`
-
-  //Si dado es 1
-  if (diceNumber === 1) {
+  if (dice === 1) {
+    switchtPlayer()
   } else {
-    p0CurrentScoreField.textContent = diceNumber
+    // sumar el dado al current score
+    currentScore += dice
+    // TODO: seleccionar de forma dinámica el textContent
+    document.querySelector(`#current--${activePlayer}`).textContent =
+      currentScore
+    // current0El.textContent = currentScore
   }
 })
 
-// Boton Hold
+btnNew.addEventListener('click', () => {
+  console.log('New game')
+})
+
+btnHold.addEventListener('click', () => {
+  scores[activePlayer] += currentScore
+  document.querySelector(`#score--${activePlayer}`).textContent =
+    scores[activePlayer]
+  switchtPlayer()
+})
+
+function switchtPlayer() {
+  document.querySelector(`#current--${activePlayer}`).textContent = 0
+  currentScore = 0
+  activePlayer = activePlayer === 0 ? 1 : 0
+  // más sencillo que con if-else
+  player0El.classList.toggle('player--active')
+  player1El.classList.toggle('player--active')
+
+  // if (activePlayer === 0) {
+  //   player0El.classList.add('player--active')
+  //   player1El.classList.remove('player--active')
+  // } else {
+  //   player1El.classList.add('player--active')
+  //   player0El.classList.remove('player--active')
+  // }
+}
