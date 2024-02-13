@@ -1,4 +1,4 @@
-// seleccionar elementos del DOM
+// Seleccionamos los elementos del DOM a utilizar
 
 const btnNew = document.querySelector('.btn--new')
 const btnRoll = document.querySelector('.btn--roll')
@@ -11,9 +11,9 @@ const current1El = document.querySelector('#current--1')
 const player0El = document.querySelector('.player--0')
 const player1El = document.querySelector('.player--1')
 
-// const btnHold = document.getElementsByClassName('btn--hold')[0]
-
 let currentScore, scores, activePlayer
+
+// Función para inicializar a 0 la partida
 
 const init = function () {
   currentScore = 0
@@ -34,23 +34,24 @@ init()
 
 console.log(btnNew, btnRoll, btnHold)
 
+// Implementamos botón de lanzar dado. Añadido eventlistener.
+
 btnRoll.addEventListener('click', () => {
-  // sacas un número del 1 al 6
+  // Número aleatorio del 1 al 6
   const dice = Math.trunc(Math.random() * 6) + 1
 
-  // mostrar el dado
+  // Ver dado
   diceEl.style.display = 'block'
   diceEl.src = `dice-${dice}.png`
 
   if (dice === 1) {
     switchtPlayer()
   } else {
-    // sumar el dado al current score
+    // Sumar tirada al current score
     currentScore += dice
-    // TODO: seleccionar de forma dinámica el textContent
+    // TODO: Seleccionar de forma dinámica el textContent
     document.querySelector(`#current--${activePlayer}`).textContent =
       currentScore
-    // current0El.textContent = currentScore
   }
 })
 
@@ -61,16 +62,16 @@ btnHold.addEventListener('click', () => {
   scores[activePlayer] += currentScore
   document.querySelector(`#score--${activePlayer}`).textContent =
     scores[activePlayer]
-  // Finaliza la partida?
+  // Finalizar la partida
   if (scores[activePlayer] >= 100) {
-    // Acaba el juego y le añadimos al jugador activo la clase winner
+    // Acabar el juego y añadimos al jugador activo la clase winner
     document
       .querySelector(`.player--${activePlayer}`)
       .classList.add('player--winner')
     document
       .querySelector(`.player--${activePlayer}`)
       .classList.remove('player--active')
-    // Esconde el dado
+    // Escondemos el dado
     diceEl.style.display = 'none'
   } else {
     // Cambio de jugador
@@ -78,11 +79,13 @@ btnHold.addEventListener('click', () => {
   }
 })
 
+// Función cambiar jugador
+
 function switchtPlayer() {
   document.querySelector(`#current--${activePlayer}`).textContent = 0
   currentScore = 0
   activePlayer = activePlayer === 0 ? 1 : 0
-  // más sencillo que con if-else
+
   player0El.classList.toggle('player--active')
   player1El.classList.toggle('player--active')
 
