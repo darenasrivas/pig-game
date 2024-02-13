@@ -62,7 +62,7 @@ btnHold.addEventListener('click', () => {
   document.querySelector(`#score--${activePlayer}`).textContent =
     scores[activePlayer]
   // Finaliza la partida?
-  if (scores[activePlayer] >= 10) {
+  if (scores[activePlayer] >= 100) {
     // Acaba el juego y le añadimos al jugador activo la clase winner
     document
       .querySelector(`.player--${activePlayer}`)
